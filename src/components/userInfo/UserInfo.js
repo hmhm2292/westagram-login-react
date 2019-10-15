@@ -6,86 +6,120 @@ class UserInfo extends React.Component {
   constructor() {
     super();
     this.state = {
-      usernamePlaceholder: "Phone Number, username, or email",
-      passwordPlaceholder: "Password",
-      usernameClass: "username",
-      passwordClass: "password",
-      userInputClass: "username2",
-      passwordInputClass: "password2",
-      userType: "text",
-      passwordType: "password",
-      userInputValue: false,
-      passwordInputValue: false
+      userInputValue: "",
+      passwordInputValue: "",
+      buttonOpacity: 0.3,
+      display: ""
     };
   }
 
-  handleKeyUp = event => {
-    if (
-      event.target.className === "username2" &&
-      event.target.value.length > 0
-    ) {
-      this.setState(() => {
-        return { userInputValue: true };
-      });
-    } else if (
-      event.target.className === "username2" &&
-      event.target.value.length === 0
-    ) {
-      this.setState(() => {
-        return { userInputValue: false };
-      });
-    }
-
-    if (
-      event.target.className === "password2" &&
-      event.target.value.length > 0
-    ) {
-      this.setState(() => {
-        return { passwordInputValue: true };
-      });
-    } else if (
-      event.target.className === "password2" &&
-      event.target.value.length === 0
-    ) {
-      this.setState(() => {
-        return { passwordInputValue: false };
-      });
-    }
+  handleOnChange = event => {
+    this.setState(
+      {
+        [event.target.name]: event.target.value
+      },
+      () => {
+        const { userInputValue, passwordInputValue } = this.state;
+        if (userInputValue.length > 0 && passwordInputValue.length > 0) {
+          this.setState(() => {
+            return { buttonOpacity: 1 };
+          });
+        }
+        if (userInputValue.length === 0) {
+          this.setState(() => {
+            return { display: "block" };
+          });
+        } else if (
+          userInputValue.length === 0 ||
+          passwordInputValue.length === 0
+        ) {
+          this.setState(() => {
+            return { buttonOpacity: 0.3, display: "none" };
+          });
+        }
+        // }
+        // buttonOpacity:
+        //   userInputValue.length > 0 && passwordInputValue.length > 0 ? 1 : 0.3
+        //});
+      }
+    );
   };
 
-  changeColor = () => {
-    const styles = {
-      filled: "1",
-      notFilled: "0.3"
-    };
-    if (
-      this.state.userInputValue === true &&
-      this.state.passwordInputValue === true
-    ) {
-      return styles.filled;
-    } else {
-      return styles.notFilled;
-    }
-  };
+  //   if (
+  //     event.target.className === "username2" &&
+  //     event.target.value.length > 0
+  //   ) {
+  //     this.setState(() => {
+  //       return { userInputValue: true };
+  //     });
+  //   } else if (
+  //     event.target.className === "username2" &&
+  //     event.target.value.length === 0
+  //   ) {
+  //     this.setState(() => {
+  //       return { userInputValue: false };
+  //     });
+  //   }
+
+  //   if (
+  //     event.target.className === "password2" &&
+  //     event.target.value.length > 0
+  //   ) {
+  //     this.setState(() => {
+  //       return { passwordInputValue: true };
+  //     });
+  //   } else if (
+  //     event.target.className === "password2" &&
+  //     event.target.value.length === 0
+  //   ) {
+  //     this.setState(() => {
+  //       return { passwordInputValue: false };
+  //     });
+  //   }
+  // };
+
+  // changeColor = () => {
+  //   const styles = {
+  //     filled: "1",
+  //     notFilled: "0.3"
+  //   };
+  //   if (
+  //     this.state.userInputValue === true &&
+  //     this.state.passwordInputValue === true
+  //   ) {
+  //     return styles.filled;
+  //   } else {
+  //     return styles.notFilled;
+  //   }
+  // };
 
   render() {
+    const { userInputValue, passwordInputValue, buttonOpacity } = this.state;
+    const { handleOnChange } = this;
     return (
       <form className="userInfo">
         <InputPassUser
-          handleKeyUp={this.handleKeyUp}
-          class={this.state.usernameClass}
-          inputClass={this.state.userInputClass}
-          type={this.state.userType}
-          placeholder={this.state.usernamePlaceholder}
+          name="userInputValue"
+          value={userInputValue}
+          handleOnChange={handleOnChange}
+          class="username"
+          inputClass="username2"
+          type="text"
+          placeholder="Phone Number, username, or email"
         />
+        <div style={{ display: this.state.display }} className="showWarning">
+          Please Write Your Username
+        </div>
         <InputPassUser
-          handleKeyUp={this.handleKeyUp}
-          class={this.state.passwordClass}
-          inputClass={this.state.passwordInputClass}
-          type={this.state.passwordType}
-          placeholder={this.state.passwordPlaceholder}
+          name="passwordInputValue"
+          value={passwordInputValue}
+          handleOnChange={handleOnChange}
+          class="password"
+          inputClass="password2"
+          type="password"
+          placeholder="Password"
         />
-        <LoginButton handleChangeColor={this.changeColor()} />
+        <LoginButton opacity={buttonOpacity} />
       </form>
     );
   }
