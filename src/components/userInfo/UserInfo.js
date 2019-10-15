@@ -22,26 +22,24 @@ class UserInfo extends React.Component {
         const { userInputValue, passwordInputValue } = this.state;
         if (userInputValue.length > 0 && passwordInputValue.length > 0) {
           this.setState(() => {
-            return { buttonOpacity: 1 };
+            return { buttonOpacity: 1, display: "none" };
+          });
+        }
+        if (userInputValue.length === 0 || passwordInputValue.length === 0) {
+          this.setState(() => {
+            return { buttonOpacity: 0.3, display: "none" };
           });
         }
         if (userInputValue.length === 0) {
           this.setState(() => {
             return { display: "block" };
           });
-        } else if (
-          userInputValue.length === 0 ||
-          passwordInputValue.length === 0
-        ) {
-          this.setState(() => {
-            return { buttonOpacity: 0.3, display: "none" };
-          });
         }
-        // }
-        // buttonOpacity:
-        //   userInputValue.length > 0 && passwordInputValue.length > 0 ? 1 : 0.3
-        //});
       }
+      // }
+      // buttonOpacity:
+      //   userInputValue.length > 0 && passwordInputValue.length > 0 ? 1 : 0.3
+      //});
     );
   };
 
@@ -107,6 +105,7 @@ class UserInfo extends React.Component {
           type="text"
           placeholder="Phone Number, username, or email"
         />
+        {console.log(this.state.display)}
         <div style={{ display: this.state.display }} className="showWarning">
           Please Write Your Username
         </div>
